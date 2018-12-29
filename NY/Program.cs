@@ -8,36 +8,36 @@ using System.Drawing;
 namespace NY
 {
 
-	class Program
-	{
-		static Random r2 = new Random();
-		/// <summary>
-		/// Длина консоли, чтобы определять ее центр
-		/// </summary>
-		static int Length = Console.BufferWidth - 5;
-		/// <summary>
-		/// Середина консоли откуда считаем елочку
-		/// </summary>
-		static int Mid = (Console.BufferWidth - 5) / 2;
-		/// <summary>
-		/// Вычота консоли - высота елочки
-		/// </summary>
-		static int Height = 24;
+    class Program
+    {
+        static Random r2 = new Random();
+        /// <summary>
+        /// Длина консоли, чтобы определять ее центр
+        /// </summary>
+        static int Length = Console.BufferWidth - 5;
+        /// <summary>
+        /// Середина консоли откуда считаем елочку
+        /// </summary>
+        static int Mid = (Console.BufferWidth - 5) / 2;
+        /// <summary>
+        /// Вычота консоли - высота елочки
+        /// </summary>
+        static int Height = 24;
 
-       static SoundPlayer music = new SoundPlayer(Properties.Resources.Метель);
+        static SoundPlayer music = new SoundPlayer(Properties.Resources.Метель);
         static SoundPlayer explos = new SoundPlayer(Properties.Resources.Взрыв1);
         /// <summary>
         /// Устанавливает цвет фона
         /// </summary>
         static void SetBackColor()
-		{
-			Console.BackgroundColor = ConsoleColor.DarkBlue;
-			for (int i = 0; i < Height + 5; i++)
-				for (int j = 0; j < Length; j++)
-					Console.Write(" ");
-		}
+        {
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            for (int i = 0; i < Height + 5; i++)
+                for (int j = 0; j < Length; j++)
+                    Console.Write(" ");
+        }
 
-       static  List<MovingPresent> presetns = new List<MovingPresent>();
+        static List<MovingPresent> presetns = new List<MovingPresent>();
         static void Explose()
         {
             explos.Load();
@@ -48,13 +48,13 @@ namespace NY
 
             Point[] points = new Point[20];
             Point[] speedss = new Point[20];
-            for (int i=0; i<points.Length; i++)
+            for (int i = 0; i < points.Length; i++)
             {
                 points[i].X = r2.Next(PresentBox.Left, PresentBox.Left + PresentBox.Width);
                 points[i].Y = r2.Next(PresentBox.Top, PresentBox.Top + PresentBox.Height);
             }
 
-            for(int i =0; i<speedss.Length; i++)
+            for (int i = 0; i < speedss.Length; i++)
             {
                 speedss[i].X = r2.Next(-10, 2);
                 speedss[i].Y = r2.Next(-4, -1);
@@ -83,57 +83,54 @@ namespace NY
                 Thread.Sleep(90);
             }
         }
-        //он оказался меньше чем надо ща
-        //ну еще научу и этому)) О ДА
-        //ВЗРЫВНЫЕ ЗОМБИ  и криперы с майнкрафта
-		/// <summary>
-		/// Главная функция - связывает все вместе
-		/// </summary>
-		/// <param name="args"></param>
-		static void Main(string[] args)
-		{
-			//текст консоли и загрузка цветов
-			Console.Title = "Новогоднее дерево";
+        /// <summary>
+        /// Главная функция - связывает все вместе
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
+        {
+            //текст консоли и загрузка цветов
+            Console.Title = "Новогоднее дерево";
 
-			Snow.Init(Length, Height);
-			Santa.Init(Length / 2, Length - 2, 0, 10);
-			//Console.Write(@"𐂂");
+            Snow.Init(Length, Height);
+            Santa.Init(Length / 2, Length - 2, 0, 10);
+            //Console.Write(@"𐂂");
 
 
-			//загрузка и запуск мызки
-			
-			music.Load();
-			music.PlayLooping();
+            //загрузка и запуск мызки
 
-			Tree.TreeInit(Mid / 2 + 2, Height, Length / 2);
+            music.Load();
+            music.PlayLooping();
 
-			SetBackColor();
-			//Console.Write(@"𐂂");
+            Tree.TreeInit(Mid / 2 + 2, Height, Length / 2);
+
+            SetBackColor();
+            //Console.Write(@"𐂂");
 
 
-			Tree.PrintTree();
-			PresentBox.Draw();
+            Tree.PrintTree();
+            PresentBox.Draw();
 
-			//бесконечный цикл
-			while (true)
-			{
+            //бесконечный цикл
+            while (true)
+            {
 
-				Santa.Draw();
+                Santa.Draw();
                 foreach (var p in presetns)
                     p.Draw();
 
-				for (int i = 0; i < 10; i++)
-				{
-					Tree.ChandeRandPixelInTree();//мигание огоньков
-					Thread.Sleep(50);
-				}
-				Santa.ReDraw();
+                for (int i = 0; i < 10; i++)
+                {
+                    Tree.ChandeRandPixelInTree();//мигание огоньков
+                    Thread.Sleep(50);
+                }
+                Santa.ReDraw();
                 foreach (var p in presetns)
-                   p.ReDraw();
+                    p.ReDraw();
                 Santa.Move();
 
-				Snow.MoveSnow();
-				PresentBox.Draw();
+                Snow.MoveSnow();
+                PresentBox.Draw();
                 foreach (var p in presetns)
                     p.Move();
 
@@ -141,45 +138,44 @@ namespace NY
 
                 //по нажатие клавиши - завершение или стирание введенного
                 if (Console.KeyAvailable)
-				{
-					var c = Console.ReadKey().Key;
+                {
+                    var c = Console.ReadKey().Key;
 
-					if (c == ConsoleKey.Enter || c == ConsoleKey.Escape)
-						break;
-					else
-					{
+                    if (c == ConsoleKey.Enter || c == ConsoleKey.Escape)
+                        break;
+                    else
+                    {
                         if (c == ConsoleKey.Spacebar)
                             presetns.Add(Santa.DropPreset());
 
-						Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-						Console.Write("*");
-					}
-				}
+                        Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                        Console.Write("*");
+                    }
+                }
 
                 bool NeedExplose = false;
 
                 ////
-                foreach(var p in presetns)
+                foreach (var p in presetns)
                 {
                     if (p.pos.X > PresentBox.Left && p.pos.X < PresentBox.Left + PresentBox.Width
                         && p.pos.Y > PresentBox.Top && p.pos.Y < PresentBox.Top + PresentBox.Left)
                         NeedExplose = true;
                 }
-            if(NeedExplose)
+                if (NeedExplose)
                 {
                     music.Stop();//выкл музыку
-                    Explose();                 
+                    Explose();
 
                     break;
                 }
 
-			}
-			music.Stop();//выкл музыку можно. Найди мне звук взрыва и ковертируй в wav
-                         // на этом пока закончим? ФАБ-500 или ФАБ-1500 хорошо) ага, спишемся) и ва
+            }
+            music.Stop();//выкл музыку можно.
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(20, 13);
             Console.WriteLine("Счастливого рождества и веселого новго года!");
             Console.ReadKey();
         }
-	}
+    }
 }

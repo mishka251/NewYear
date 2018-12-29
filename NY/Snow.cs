@@ -10,7 +10,7 @@ namespace NY
 	static class Snow
 	{
 
-		static List<Point> Points;// = new List<Point>();//места снежинок
+		static List<Point> Points;//места снежинок
 		static int MaxSnowCount = 40;
 
 		static int Length, Height;
@@ -71,14 +71,11 @@ namespace NY
 
 			Move();
 
-
 			if (Points.Count < MaxSnowCount)
 				Points.Add(new Point(r2.Next(Length), 3));
 
 			Draw();
 
 		}
-
-
 	}
 }
